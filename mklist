@@ -1,0 +1,4 @@
+#! /bin/sh
+# quick and dirty
+find pictures -type f|xargs gm identify| \
+    perl -pe 's/(\[[0-9]+\])? JPEG ([0-9]+x[0-9]+).*/ $2/' >list
