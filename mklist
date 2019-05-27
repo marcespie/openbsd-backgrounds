@@ -1,4 +1,60 @@
-#! /bin/sh
-# quick and dirty
-find pictures -type f|xargs gm identify| \
-    perl -pe 's/(\[[0-9]+\])? JPEG ([0-9]+x[0-9]+).*/ $2/' >list
+#! /usr/bin/perl
+
+# look at the pics and show their size and aspect ratio
+
+use File::Find;
+use strict;
+use warnings;
+
+# Uses Farey sequences to get a good approximation
+sub farey
+{
+	my ($x, $N) = @_;
+    	my ($a, $b) = (0, 1);
+    	my ($c, $d) = (1, 0);
+	while ($b <= $N && $d <= $N) {
+		my $mediant = ($a+$c)/($b+$d);
+		if ($x == $mediant) {
+			if ($b + $d <= $N) {
+				return ($a+$c, $b+$d);
+			} elsif ($d > $b) {
+				return ($c, $d);
+			} else {
+				return ($a, $b);
+			}
+		} elsif ($x > $mediant) {
+			($a, $b) = ($a+$c, $b+$d);
+		} else {
+			($c, $d) = ($a+$c, $b+$d);
+		}
+	}
+	if ($b > $N) {
+		return ($c, $d);
+	} else {
+		return ($a, $b);
+	}
+}
+
+# first build the list of pics
+my @list;
+find(sub {
+	return unless -f $_;
+	push(@list, $File::Find::name);
+    }, "pictures");
+
+# then pass it off to whatever tool can do the deed
+open(my $p, "-|", "gm", "identify", @list) or die;
+
+open(my $out, ">", "list") or die;
+while (<$p>) {
+	chomp;
+	if (m/^(.*?)(\[[0-9]+\])? JPEG ([0-9]+)x([0-9]+).*/) {
+		my ($title, $h, $w) = ($1, $3, $4);
+		my ($a, $b) = farey($h/ $w, 16);
+		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
+	} else {
+		print STDERR "Bad line #$. from pipe: $_\n";
+	}
+}
+close($out);
+close($p);
