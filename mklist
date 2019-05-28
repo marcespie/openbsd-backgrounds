@@ -48,6 +48,7 @@ open(my $p, "-|", "gm", "identify", @list) or die;
 open(my $out, ">", "list") or die;
 open(my $V, ">", "portrait") or die;
 open(my $H, ">", "landscape") or die;
+open(my $Q, ">", "square") or die;
 while (<$p>) {
 	chomp;
 	if (m/^(.*?)(\[[0-9]+\])? JPEG ([0-9]+)x([0-9]+).*/) {
@@ -56,11 +57,12 @@ while (<$p>) {
 		my $o;
 		if ($a >= $b * 1.2) {
 			$o = $H;
-		}
-		if ($a*1.2 <= $b) {
+		} elsif ($a*1.2 <= $b) {
 			$o = $V;
+		} else {
+			$o = $Q;
 		}
-		print $o $title, "\n" if defined $o;
+		print $o $title, "\n";
 		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
 	} else {
 		print STDERR "Bad line #$. from pipe: $_\n";
@@ -69,4 +71,5 @@ while (<$p>) {
 close($out);
 close($V);
 close($H);
+close($Q);
 close($p);
