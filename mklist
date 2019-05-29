@@ -43,7 +43,7 @@ find(sub {
     }, "pictures");
 
 # then pass it off to whatever tool can do the deed
-open(my $p, "-|", "gm", "identify", @list) or die;
+open(my $p, "-|", "gm", "identify", (sort @list)) or die;
 
 open(my $out, ">", "list") or die;
 open(my $V, ">", "portrait") or die;
