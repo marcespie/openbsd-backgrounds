@@ -1,4 +1,9 @@
 #! /bin/sh
 # example wallpaper script
 # this uses xwallpaper and random_run from ports
-xwallpaper --output HDMI-0 --zoom `rr -1l portrait echo` --output VGA-0 --zoom `rr -1l landscape echo`
+
+# choose a random portrait pic
+pic1=`rr -1pl portrait`
+# and a random landscape pic
+pic2=`rr -1pl landscape`
+xwallpaper --output HDMI-0 --zoom $pic1 --output VGA-0 --zoom $pic2
