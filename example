@@ -14,7 +14,7 @@ do
 	;;
     esac
     pics="$pics $pic"
-    args="$args --output $display --zoom $pic"
+    args="$args --output $display --maximize $pic"
 done
 echo "Showing $pics"
 eval xwallpaper $args
