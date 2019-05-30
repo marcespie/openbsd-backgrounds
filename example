@@ -7,10 +7,10 @@ while read display connected res right rest;
 do
     case "$right" in
     left|right)
-	pic=`rr -1pl portrait`
+	pic=`rr -1rp portrait/*`
 	;;
     *)
-	pic=`rr -1pl landscape`
+	pic=`rr -1rp landscape/*`
 	;;
     esac
     pics="$pics $pic"
