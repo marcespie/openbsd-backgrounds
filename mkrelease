@@ -2,7 +2,7 @@
 
 # this is the small script I use to build releases
 set -e
-V=1.6
+V=1.7
 D=openbsd-backgrounds-$V
 rm -rf openbsd-backgrounds-*
 ftp -o - https://github.com/marcespie/openbsd-backgrounds/archive/$V.tar.gz| tar zxvf -
