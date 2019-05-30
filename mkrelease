@@ -5,11 +5,12 @@ set -e
 V=1.6
 D=openbsd-backgrounds-$V
 rm -rf openbsd-backgrounds-*
-#ftp -o - https://github.com/marcespie/openbsd-backgrounds/archive/$V.tar.gz| tar zxvf -
+ftp -o - https://github.com/marcespie/openbsd-backgrounds/archive/$V.tar.gz| tar zxvf -
 cd $D
 pwd
 gm mogrify -resize '2560x1600>^' `cat landscape`
 gm mogrify -resize '1600x2560>^' `cat portrait`
 gm mogrify -resize '2560x2560>^' `cat square`
+perl mklist
 cd ..
 tar zcf $D.tar.gz $D
