@@ -2,20 +2,20 @@
 # example wallpaper script
 # this uses xwallpaper and random_run from ports
 
-xrandr|grep -w connected|sed -e 's/primary //'|  {
-while read display res right rest;
+xrandr|grep -w connected|sed -e 's/primary//'|  {
+while read display connected res right rest;
 do
-	case "$right" in
-	left|right)
-	    pic=`rr -1pl portrait`
-	    ;;
-	*)
-	    pic=`rr -1pl landscape`
-	    ;;
-	esac
-pics="$pics $pic"
-args="$args --output $display --zoom $pic"
+    case "$right" in
+    left|right)
+	pic=`rr -1pl portrait`
+	;;
+    *)
+	pic=`rr -1pl landscape`
+	;;
+    esac
+    pics="$pics $pic"
+    args="$args --output $display --zoom $pic"
 done
-echo "Showing$pics"
+echo "Showing $pics"
 eval xwallpaper $args
 }
