@@ -55,15 +55,14 @@ my @list;
 find(sub {
 	return unless -f $_;
 	push(@list, $File::Find::name);
-    }, "pictures");
+    }, "pictures", "portrait", "landscape");
 
 # then pass it off to whatever tool can do the deed
 open(my $p, "-|", "gm", "identify", (sort @list)) or die;
 
 open(my $out, ">", "list") or die;
-open(my $V, ">", "portrait") or die;
-open(my $H, ">", "landscape") or die;
-open(my $Q, ">", "square") or die;
+open(my $V, ">", "portrait.list") or die;
+open(my $H, ">", "landscape.list") or die;
 while (<$p>) {
 	chomp;
 	if (m/^(.*?)(\[[0-9]+\])? JPEG ([0-9]+)x([0-9]+).*/) {
@@ -75,7 +74,7 @@ while (<$p>) {
 		} elsif ($a*1.2 <= $b) {
 			$o = $V;
 		} else {
-			$o = $Q;
+			$o = $H;
 		}
 		print $o $title, "\n";
 		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
@@ -86,5 +85,4 @@ while (<$p>) {
 close($out);
 close($V);
 close($H);
-close($Q);
 close($p);
