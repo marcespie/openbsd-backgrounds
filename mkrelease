@@ -2,10 +2,14 @@
 
 # this is the small script I use to build releases
 set -e
-V=1.7
+V=HEAD
+if [ $# -gt 0 ]
+then
+	V=$1
+fi
 D=openbsd-backgrounds-$V
 rm -rf openbsd-backgrounds-*
-ftp -o - https://github.com/marcespie/openbsd-backgrounds/archive/$V.tar.gz| tar zxvf -
+git archive --prefix=$D/ --format=tar HEAD|tar xvf -
 cd $D
 pwd
 rm -f portrait landscape
