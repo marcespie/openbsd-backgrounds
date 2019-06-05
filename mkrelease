@@ -2,19 +2,23 @@
 
 # this is the small script I use to build releases
 set -e
-V=1.7
+V=HEAD
+if [ $# -gt 0 ]
+then
+	V=$1
+fi
 D=openbsd-backgrounds-$V
-rm -rf openbsd-backgrounds-*
-ftp -o - https://github.com/marcespie/openbsd-backgrounds/archive/$V.tar.gz| tar zxvf -
+rm -rf $D
+git archive --prefix=$D/ --format=tar HEAD|tar xvf -
 cd $D
-pwd
 rm -f portrait landscape
-gm mogrify -resize '2560x1600>^' `cat landscape.list`
-gm mogrify -resize '1600x2560>^' `cat portrait.list`
+cat landscape.list |xargs -n20 -P8 gm mogrify -resize '2560x1600>^' &
+gm mogrify -resize '1600x2560>^' `cat portrait.list` &
+wait
 for o in landscape portrait
 do
     cat $o.list|while read i; do 
-	j=`dirname $i|sed -e s/pictures/$o-pictures/`
+	j=`dirname $i|sed -e s/pictures/$o/`
 	mkdir -p $j
 	mv $i $j
     done

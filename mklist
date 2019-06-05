@@ -50,12 +50,22 @@ sub farey
 	}
 }
 
+my @dirs;
+
+for my $i (qw(pictures portrait-pictures landscape-pictures portrait landscape)) {
+	push(@dirs, $i) if -d $i;
+}
+
+if (@dirs == 0) {
+	print STDERR "No valid directory\n";
+	exit(1);
+}
 # first build the list of pics
 my @list;
 find(sub {
 	return unless -f $_;
 	push(@list, $File::Find::name);
-    }, "pictures", "portrait-pictures", "landscape-pictures");
+    }, @dirs);
 
 # then pass it off to whatever tool can do the deed
 open(my $p, "-|", "gm", "identify", (sort @list)) or die;
