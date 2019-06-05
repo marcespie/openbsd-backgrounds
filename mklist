@@ -52,10 +52,14 @@ sub farey
 
 my @dirs;
 
-for my $i (qw(pictures portrait-pictures landscape-pictures)) {
+for my $i (qw(pictures portrait-pictures landscape-pictures portrait landscape)) {
 	push(@dirs, $i) if -d $i;
 }
 
+if (@dirs == 0) {
+	print STDERR "No valid directory\n";
+	exit(1);
+}
 # first build the list of pics
 my @list;
 find(sub {

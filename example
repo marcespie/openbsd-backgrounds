@@ -2,6 +2,11 @@
 # example wallpaper script
 # this uses xwallpaper and random_run from ports
 
+set -e
+: ${PREFIX:=/usr/local}
+: ${BG:=share/openbsd-backgrounds}
+cd ${PREFIX}/${BG}
+
 xrandr|grep -w connected|sed -e 's/primary//'|  {
 while read display connected res right rest;
 do
