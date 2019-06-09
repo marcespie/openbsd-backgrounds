@@ -9,7 +9,7 @@ then
 fi
 D=openbsd-backgrounds-$V
 rm -rf $D
-git archive --prefix=$D/ --format=tar HEAD|tar xvf -
+git archive --prefix=$D/ --format=tar $V|tar xvf -
 cd $D
 rm -f portrait landscape
 cat landscape.list |xargs -n20 -P8 gm mogrify -resize '2560x1600>^' &
