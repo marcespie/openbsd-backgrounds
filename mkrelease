@@ -11,7 +11,7 @@ D=openbsd-backgrounds-$V
 rm -rf $D
 git archive --prefix=$D/ --format=tar $V|tar xvf -
 cd $D
-rm -f portrait landscape
+perl mklist
 cat landscape.list |xargs -n20 -P8 gm mogrify -resize '2560x1600>^' &
 gm mogrify -resize '1600x2560>^' `cat portrait.list` &
 wait
