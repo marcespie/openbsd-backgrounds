@@ -17,9 +17,10 @@
 #
 # look at the pics and show their size and aspect ratio
 
-use File::Find;
 use strict;
 use warnings;
+use File::Find;
+use File::Bin;
 use lib "$FindBin::Bin/../lib";
 use Math::Farey;
 
