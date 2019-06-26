@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use List::Util;
 use File::Find;
+use OpenBSD::Subst;
 
 # farey sequences (see wikipedia)
 # useful for computing an aspect ratio
@@ -44,12 +45,12 @@ sub add_dir
 	    }, $dir);
 }
 
+my $s = OpenBSD::Subst->new;
+$s->add('TRUEPREFIX' => '/usr/local');
+$s->add('LOCALBASE' => '/usr/local');
 
-my $prefix = '${TRUEPREFIX}';
-my $localbase = '${LOCALBASE}';
-
-$prefix =~ s,^[\$]\{TRUEPREFIX\}$,/usr/local,;
-$localbase =~ s,^[\$]\{LOCALBASE\}$,/usr/local,;
+my $prefix = $s->do('${TRUEPREFIX}');
+my $localbase = $s->do('${LOCALBASE}');
 
 if (!-x "$localbase/bin/xwallpaper") {
 	print STDERR "You must pkg_add xwallpaper\n";
