@@ -4,18 +4,8 @@ use warnings;
 use List::Util;
 use File::Find;
 
-
-my $prefix = '${TRUEPREFIX}';
-my $localbase = '${LOCALBASE}';
-
-$prefix =~ s,\$\{TRUEPREFIX\},/usr/local,;
-$localbase =~ s,\$\{LOCALBASE\},/usr/local,;
-
-if (!-x "$localbase/bin/xwallpaper") {
-	print STDERR "You must pkg_add xwallpaper\n";
-	exit 1;
-}
-my $imagedir = "$prefix/share/openbsd-backgrounds";
+# farey sequences (see wikipedia)
+# useful for computing an aspect ratio
 sub farey
 {
 	my ($x, $N) = @_;
@@ -44,6 +34,28 @@ sub farey
 	}
 }
 
+sub add_dir
+{
+	my ($l, $dir) = @_;
+	find(
+	    sub { 
+		push @$l, "--maximize $File::Find::name" 
+		    if -f $_; 
+	    }, $dir);
+}
+
+
+my $prefix = '${TRUEPREFIX}';
+my $localbase = '${LOCALBASE}';
+
+$prefix =~ s,\$\{TRUEPREFIX\},/usr/local,;
+$localbase =~ s,\$\{LOCALBASE\},/usr/local,;
+
+if (!-x "$localbase/bin/xwallpaper") {
+	print STDERR "You must pkg_add xwallpaper\n";
+	exit 1;
+}
+my $imagedir = "$prefix/share/openbsd-backgrounds";
 $ENV{PATH} = "${localbase}/bin:/usr/bin:/usr/X11R6/bin";
 
 open(my $pipe, "-|", "xrandr") or die "Can't run xrandr: $!";
@@ -63,7 +75,6 @@ while (<$pipe>) {
 		($monitor->{a}, $monitor->{b}) = farey($1/$2, 25);
 	}
 	$monitor->{portrait} = ($r[0] eq 'left' or $r[0] eq 'right');
-	print "$monitor->{name} $monitor->{a}:$monitor->{b} $monitor->{portrait}\n";
 }
 close($pipe);
 
@@ -80,15 +91,14 @@ for my $m (values %$monitors) {
 		open my $file, "<", $i;
 		while (<$file>) {
 			chomp;
+			if (m/^\+(.*)/) {
+				add_dir(\@l, $1);
+			}
 			push(@l, $_);
 		}
 	} else {
 		my $dir = $m->{a} < $m->{b} ? "portrait" : "landscape";
-		find(
-		    sub { 
-		    	push @l, "--maximize $File::Find::name" 
-			    if -f $_; 
-		    }, $dir);
+		add_dir(\@l, $dir);
 	}
 	@l = (List::Util::shuffle @l);
 	push(@command, '--output', $m->{name}, split(/\s+/, $l[0]));
