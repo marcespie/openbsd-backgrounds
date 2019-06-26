@@ -67,6 +67,21 @@ find(sub {
 	push(@list, $File::Find::name);
     }, @dirs);
 
+my ($orig_width, $new_width);
+
+# let's get the old list
+if (open my $in, '<', "list") {
+	$orig_width = {};
+	while(<$in>) {
+		if (m/^(.*)\s(\d+)x\d+\s/) {
+			$orig_width->{$1} = $2;
+		} else {
+			die "Corrupted list file\n";
+		}
+	}
+}
+
+
 # then pass it off to whatever tool can do the deed
 open(my $p, "-|", "gm", "identify", (sort @list)) or die;
 
@@ -88,6 +103,7 @@ while (<$p>) {
 		}
 		print $o $title, "\n";
 		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
+		$new_width->{$title} = $h;
 	} else {
 		print STDERR "Bad line #$. from pipe: $_\n";
 	}
@@ -96,3 +112,11 @@ close($out);
 close($V);
 close($H);
 close($p);
+if (defined $orig_width) {
+	while my ($k, $w) = each %$orig_width) {
+		print "$k => ", $w/$new_width->{$k}, "\n";
+	}
+	for my $r (glob('aspect-*')) {
+	#	rescale($r, $orig_width, $new_width);
+	}
+}
