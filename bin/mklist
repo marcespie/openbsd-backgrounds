@@ -50,7 +50,7 @@ sub read_list
 	return $data;
 }
 
-for my $i (qw(locations)) {
+for my $i (@locations) {
 	push(@dirs, $i) if -d $i;
 }
 
@@ -89,7 +89,6 @@ while (<$p>) {
 		}
 		print $o $title, "\n";
 		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
-		$new_width->{$title} = $h;
 	} else {
 		print STDERR "Bad line #$. from pipe: $_\n";
 	}
@@ -101,7 +100,7 @@ close($p);
 if (defined $orig_width) {
 	my $new_width = read_list();
 	while (my ($k, $w) = each %$orig_width) {
-		print "$k => ", $w, " ", $new_width->{$k}, "\n";
+		print "$k => ", $w->{width}, " ", $new_width->{$k}{width}, "\n";
 	}
 	for my $r (glob('aspect-*')) {
 	#	rescale($r, $orig_width, $new_width);
