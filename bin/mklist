@@ -23,10 +23,52 @@ use File::Find;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Math::Farey;
+use Data::Dumper;
 
 my @dirs;
 my @locations = (qw(pictures portrait landscape));
 
+
+sub findpic
+{
+	my $fullname = shift;
+	for my $d (@locations) {
+		if ($fullname =~ m,^\Q$d\E/(.*),) {
+			return $1;
+		}
+	}
+	return undef;
+}
+
+sub rescale
+{
+	my ($file, $old, $new) = @_;
+	my @l = ();
+	open(my $in, '<', $file) or die;
+	while(<$in>) {
+		chomp;
+		if (my ($w, $h, $x, $y, $f) = 
+		    m/^\-\-trim (\d+)x(\d+)\+(\d+)\+(\d+)\s+\-\-focus\s+(.*)/) {
+			my $k = findpic($f);
+			if (!exists $new->{$k}) {
+				print "CAN'T FIND picture $f\n";
+				exit(1);
+			}
+			my $factor = $new->{$k}{width}/$old->{$k}{width};
+			$w = int($w * $factor);
+			$h = int($h * $factor);
+			$x = int($x * $factor);
+			$y = int($y * $factor);
+			push(@l, "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}\n");
+		} else {
+			push(@l, "$_\n");
+		}
+	}
+	close($in);
+	open(my $out, '>', $file) or die;
+	print $out $_ for @l;
+	close($out);
+}
 
 sub read_list
 {
@@ -35,14 +77,13 @@ sub read_list
 	my $data = {};
 	while(<$in>) {
 		if (my ($fullname, $width, $height) = m/^(.*)\s(\d+)x(\d+)\s/) {
-			my $k = $fullname;
-			for my $d (@locations) {
-				if ($fullname =~ m,^\Q$d\E/(.*),) {
-					$k = $1;
-				}
-			}
-			$data->{$k} = {name => $fullname, width => $width,
+			$data->{$fullname} = {name => $fullname, 
+			    width => $width,
 			    height => $height};
+			my $k = findpic($fullname);
+			if (defined $k) {
+				$data->{$k} = $data->{$fullname};
+			}
 		} else {
 			die "Incorrect line in list $_\n";
 		}
@@ -66,7 +107,7 @@ find(sub {
     }, @dirs);
 
 # let's get the old list
-my $orig_width = read_list();
+my $orig = read_list();
 
 # then pass it off to whatever tool can do the deed
 open(my $p, "-|", "gm", "identify", (sort @list)) or die;
@@ -97,12 +138,10 @@ close($out);
 close($V);
 close($H);
 close($p);
-if (defined $orig_width) {
-	my $new_width = read_list();
-	while (my ($k, $w) = each %$orig_width) {
-		print "$k => ", $w->{width}, " ", $new_width->{$k}{width}, "\n";
-	}
+
+if (defined $orig) {
+	my $new = read_list();
 	for my $r (glob('aspect-*')) {
-	#	rescale($r, $orig_width, $new_width);
+		rescale($r, $orig, $new);
 	}
 }
