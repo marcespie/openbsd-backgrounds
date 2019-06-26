@@ -48,8 +48,8 @@ sub add_dir
 my $prefix = '${TRUEPREFIX}';
 my $localbase = '${LOCALBASE}';
 
-$prefix =~ s,\$\{TRUEPREFIX\},/usr/local,;
-$localbase =~ s,\$\{LOCALBASE\},/usr/local,;
+$prefix =~ s,^[\$]\{TRUEPREFIX\}$,/usr/local,;
+$localbase =~ s,^[\$]\{LOCALBASE\}$,/usr/local,;
 
 if (!-x "$localbase/bin/xwallpaper") {
 	print STDERR "You must pkg_add xwallpaper\n";
