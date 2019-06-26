@@ -12,7 +12,7 @@ rm -rf $D
 git archive --prefix=$D/ --format=tar $V|tar xvf -
 cd $D
 rm list
-perl mklist
+perl bin/mklist
 cat landscape.list |xargs -n20 -P8 gm mogrify -resize '2560x1600>^' &
 gm mogrify -resize '1600x2560>^' `cat portrait.list` &
 wait
@@ -24,7 +24,7 @@ do
 	mv $i $j
     done
 done
-perl mklist
+perl bin/mklist
 rm -rf pictures landscape.list portrait.list
 cd ..
 tar zcf $D.tar.gz $D
