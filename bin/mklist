@@ -114,7 +114,7 @@ close($H);
 close($p);
 if (defined $orig_width) {
 	while (my ($k, $w) = each %$orig_width) {
-		print "$k => ", $w/$new_width->{$k}, "\n";
+		print "$k => ", $w, " ", $new_width->{$k}, "\n";
 	}
 	for my $r (glob('aspect-*')) {
 	#	rescale($r, $orig_width, $new_width);
