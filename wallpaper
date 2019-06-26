@@ -57,6 +57,9 @@ if (!-x "$localbase/bin/xwallpaper") {
 	exit 1;
 }
 my $imagedir = "$prefix/share/openbsd-backgrounds";
+if (@ARGV != 0) {
+	$imagedir = shift;
+}
 $ENV{PATH} = "${localbase}/bin:/usr/bin:/usr/X11R6/bin";
 
 open(my $pipe, "-|", "xrandr") or die "Can't run xrandr: $!";
