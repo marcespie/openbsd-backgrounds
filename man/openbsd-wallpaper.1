@@ -1,0 +1,76 @@
+.\" Copyright (c) 2019 Marc Espie <espie@openbsd.org>
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.Dd $Mdocdate$
+.Dt OPENBSD-WALLPAPER 1
+.Os
+.Sh NAME
+.Nm openbsd-wallpaper
+.Nd display wallpaper pictures using xwallpaper
+.Sh SYNOPSIS
+.Nm
+.Op Ar directory
+.Sh DESCRIPTION
+.Nm
+uses
+.Xr xwallpaper 1
+to display background pictures from the 
+.Sq openbsd-backgrounds
+picture collection.
+.Pp
+.Nm
+will query the display geometry using
+.Xr xrandr 1 ,
+and choose appropriate pictures based
+on orientation and aspect-ratio of each monitor of the display.
+.Pp
+By default,
+.Nm
+will look into
+.Pa ${PREFIX}/share/openbsd-background ,
+but another 
+.Ar directory 
+can be specified instead.
+.Pp
+A random picture will be chosen for each monitor of the display,
+taken from the
+.Pa landscape
+or
+.Pa portrait
+subdirectory depending on the monitor's orientation.
+.Pp
+If an
+.Pa aspect-a:b
+file is found matching a monitor aspect ratio, it will be used
+as a source of pictures instead.
+.Pp
+Such a file may hold 3 types of lines:
+.Bl -bullet -offset indent 
+.It
+A filename, to be used with
+.Xr xwallpaper 1 Ns 's
+.Fl -maximize .
+.It
+A complete invocation of
+.Xr xwallpaper 1 .
+.It
+A
+.Sq +directory
+line
+.El
+.Sh AUTHORS
+The
+.Nm
+utility was written by
+.An Marc Espie Aq Mt espie@openbsd.org .
