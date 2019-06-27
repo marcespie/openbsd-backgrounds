@@ -37,6 +37,9 @@ sub farey
 sub add_dir
 {
 	my ($l, $dir) = @_;
+	if (!-d $dir) {
+		$dir = 'pictures';
+	}
 	find(
 	    sub { 
 		push @$l, $File::Find::name if -f $_; 

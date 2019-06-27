@@ -43,4 +43,12 @@
 --trim 1944x3456+212+0 --focus pictures/ian/dscn0183-costarica-iguana.jpg
 --trim 1673x2973+1470+0 --focus pictures/kirby/DSCN0100.JPG
 --trim 1687x3000+1117+0 --focus pictures/kirby/DSCN0105.JPG
-+portrait
+--trim 2189x3891+224+5 --focus pictures/kirby/IMGP1184.jpg
+--trim 3865x2174+7+301 --focus pictures/kirby/IMGP3569.JPG
+--trim 3872x2178+0+290 --focus pictures/kirby/IMGP3583.JPG
+--trim 4122x2319+-250+187 --focus pictures/kirby/IMGP3587.JPG
+--trim 1628x2894+763+0 --focus pictures/tj/DSC_1099.jpg
+--trim 1733x3080+1054+0 --focus pictures/tj/DSC_1125.jpg
+--trim 1671x2971+2032+0 --focus pictures/tj/DSC_1361.jpg
+--trim 1702x3025+1261+0 --focus pictures/tj/DSC_1419.jpg
+--trim 1430x2542+1708+0 --focus pictures/tj/DSC_2124.jpg
