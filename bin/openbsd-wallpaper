@@ -90,8 +90,11 @@ my @command = (qw(xwallpaper));
 for my $m (values %$monitors) {
 	my @l;
 	my $ratio = "$m->{a}:$m->{b}";
-	# here we can smudge the ratio
 	my $i = "aspect-$ratio";
+	# let's cheat a bit
+	if (!-r $i && $ratio eq '5:8') {
+		$i = 'aspect-9:16';
+	}
 	if (-r $i) {
 		open my $file, "<", $i;
 		while (<$file>) {
