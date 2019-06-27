@@ -5,17 +5,41 @@ use warnings;
 use List::Util;
 use File::Find;
 use OpenBSD::Subst;
-use FindBin;
-use lib "$FindBin::Bin/../lib";
-use Math::Farey;
+
+sub farey
+{
+	my ($x, $N) = @_;
+    	my ($a, $b) = (0, 1);
+    	my ($c, $d) = (1, 0);
+	while ($b <= $N && $d <= $N) {
+		my $mediant = ($a+$c)/($b+$d);
+		if ($x == $mediant) {
+			if ($b + $d <= $N) {
+				return ($a+$c, $b+$d);
+			} elsif ($d > $b) {
+				return ($c, $d);
+			} else {
+				return ($a, $b);
+			}
+		} elsif ($x > $mediant) {
+			($a, $b) = ($a+$c, $b+$d);
+		} else {
+			($c, $d) = ($a+$c, $b+$d);
+		}
+	}
+	if ($b > $N) {
+		return ($c, $d);
+	} else {
+		return ($a, $b);
+	}
+}
 
 sub add_dir
 {
 	my ($l, $dir) = @_;
 	find(
 	    sub { 
-		push @$l, "--maximize $File::Find::name" 
-		    if -f $_; 
+		push @$l, $File::Find::name if -f $_; 
 	    }, $dir);
 }
 
@@ -79,7 +103,9 @@ for my $m (values %$monitors) {
 		add_dir(\@l, $dir);
 	}
 	@l = (List::Util::shuffle @l);
-	push(@command, '--output', $m->{name}, split(/\s+/, $l[0]));
+	my @r = split(/\s+/, $l[0]);
+	unshift(@r, '--maximize') if @r == 1;
+	push(@command, '--output', $m->{name}, @r);
 }
 print "Running ", join(' ', @command), "\n";
 exec {$command[0]} @command;
