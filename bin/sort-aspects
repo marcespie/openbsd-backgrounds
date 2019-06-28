@@ -54,6 +54,7 @@ sub sort_file
 	for my $k (sort keys %$r) {
 		for my $l (@{$k->{$k}}) {
 			print $out $l, "\n";
+		}
 	}
 	close($out);
 }
