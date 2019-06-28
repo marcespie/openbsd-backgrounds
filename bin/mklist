@@ -70,6 +70,7 @@ sub rescale
 	my ($file, $old, $new) = @_;
 	my @l = ();
 	open(my $in, '<', $file) or die;
+	my $r = {};
 	while(<$in>) {
 		chomp;
 		if (my ($w, $h, $x, $y, $f) = 
@@ -84,14 +85,16 @@ sub rescale
 			$h = int($h * $factor);
 			$x = int($x * $factor);
 			$y = int($y * $factor);
-			push(@l, "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}\n");
+			$r->{$k} = "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
 		} else {
-			push(@l, "$_\n");
+			$r->{$_} = $_;
 		}
 	}
 	close($in);
 	open(my $out, '>', $file) or die;
-	print $out $_ for @l;
+	for my $k (sort keys %$r) {
+		print $out $r->{$k}, "\n";
+	}
 	close($out);
 }
 
