@@ -41,12 +41,14 @@ sub sort_file
 	my $r = {};
 	while(<$in>) {
 		chomp;
+		next if m/^\s*$/; # skip empty lines
 		if (my ($w, $h, $x, $y, $f) = 
 		    m/^\-\-trim (\d+)x(\d+)\+(\d+)\+(\d+)\s+\-\-focus\s+(.*)/) {
 			my $k = findpic($f);
 			push @{$r->{$k}}, "--trim ${w}x$h+$x+$y --focus $f";
 		} else {
-			push @{$r->{$_}}, $_;
+			my $k = findpic($_);
+			push @{$r->{$k}}, $_;
 		}
 	}
 	close($in);

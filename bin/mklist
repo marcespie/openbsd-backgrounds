@@ -71,6 +71,7 @@ sub rescale
 	my $r = {};
 	while(<$in>) {
 		chomp;
+		next if m/^\s*$/; # skip empty lines
 		if (my ($w, $h, $x, $y, $f) = 
 		    m/^\-\-trim (\d+)x(\d+)\+(\d+)\+(\d+)\s+\-\-focus\s+(.*)/) {
 			my $k = findpic($f);
@@ -86,7 +87,8 @@ sub rescale
 			push @{$r->{$k}},
 			    "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
 		} else {
-			push @{$r->{$_}}, $_;
+			my $k = findpic($_);
+			push @{$r->{$k}}, $_;
 		}
 	}
 	close($in);
