@@ -1,0 +1,63 @@
+#! /usr/bin/perl
+
+# Copyright (c) 2019 Marc Espie <espie@openbsd.org>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+# 
+#
+# look at the pics and show their size and aspect ratio
+
+use strict;
+use warnings;
+
+my @locations = (qw(pictures portrait landscape));
+
+
+sub findpic
+{
+	my $fullname = shift;
+	for my $d (@locations) {
+		if ($fullname =~ m,^\Q$d\E/(.*),) {
+			return $1;
+		}
+	}
+	return undef;
+}
+
+sub sort_file
+{
+	my $file = shift;
+	open(my $in, '<', $file) or die;
+	my $r = {};
+	while(<$in>) {
+		chomp;
+		if (my ($w, $h, $x, $y, $f) = 
+		    m/^\-\-trim (\d+)x(\d+)\+(\d+)\+(\d+)\s+\-\-focus\s+(.*)/) {
+			my $k = findpic($f);
+			push @{$r->{$k}}, "--trim ${w}x$h+$x+$y --focus $f";
+		} else {
+			push @{$r->{$_}}, $_;
+		}
+	}
+	close($in);
+	open(my $out, '>', $file) or die;
+	for my $k (sort keys %$r) {
+		for my $l (@{$k->{$k}}) {
+			print $out $l, "\n";
+	}
+	close($out);
+}
+
+for my $r (glob('aspect-*')) {
+	sort_file($r);
+}

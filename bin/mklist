@@ -20,7 +20,6 @@
 use strict;
 use warnings;
 use File::Find;
-use FindBin;
 
 sub farey
 {
@@ -68,7 +67,6 @@ sub findpic
 sub rescale
 {
 	my ($file, $old, $new) = @_;
-	my @l = ();
 	open(my $in, '<', $file) or die;
 	my $r = {};
 	while(<$in>) {
@@ -85,15 +83,18 @@ sub rescale
 			$h = int($h * $factor);
 			$x = int($x * $factor);
 			$y = int($y * $factor);
-			$r->{$k} = "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
+			push @{$r->{$k}},
+			    "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
 		} else {
-			$r->{$_} = $_;
+			push @{$r->{$_}}, $_;
 		}
 	}
 	close($in);
 	open(my $out, '>', $file) or die;
 	for my $k (sort keys %$r) {
-		print $out $r->{$k}, "\n";
+		for my $l (@{$r->{$k}}) {
+			print $out $l, "\n";
+		}
 	}
 	close($out);
 }
