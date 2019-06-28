@@ -88,6 +88,9 @@ sub rescale
 			    "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
 		} else {
 			my $k = findpic($_);
+			if (exists $new->{$k}) {
+				$_ = $new->{$k}{name};
+			}
 			push @{$r->{$k}}, $_;
 		}
 	}
