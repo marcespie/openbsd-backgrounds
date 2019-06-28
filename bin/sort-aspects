@@ -52,7 +52,7 @@ sub sort_file
 	close($in);
 	open(my $out, '>', $file) or die;
 	for my $k (sort keys %$r) {
-		for my $l (@{$k->{$k}}) {
+		for my $l (@{$r->{$k}}) {
 			print $out $l, "\n";
 		}
 	}
