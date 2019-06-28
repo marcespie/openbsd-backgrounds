@@ -53,10 +53,47 @@ pictures/ian/dscn0099-costarica-tree.jpg
 --trim 1668x2965+529+14 --focus pictures/kirby/DSCN1133.JPG
 --trim 1668x2965+1469+31 --focus pictures/kirby/DSCN1136.JPG
 --trim 1452x2582+785+10 --focus pictures/kirby/IMGP0583.JPG
+--trim 1763x2592+228+0 --focus pictures/kirby/IMGP0680.JPG
+--trim 1697x2592+833+0 --focus pictures/kirby/IMGP0713.JPG
+--trim 1835x2592+781+0 --focus pictures/kirby/IMGP0796.JPG
+--trim 1510x2000+546+0 --focus pictures/kirby/IMGP0986.JPG
+--trim 1932x2616+1140+0 --focus pictures/kirby/IMGP1160.jpg
+--trim 2212x2616+978+0 --focus pictures/kirby/IMGP1162.jpg
+--trim 2264x2613+933+3 --focus pictures/kirby/IMGP1172.jpg
 pictures/kirby/IMGP1184.jpg
+--trim 1857x2616+904+0 --focus pictures/kirby/IMGP1241.jpg
+--trim 2115x2616+717+0 --focus pictures/kirby/IMGP1271.jpg
+--trim 2045x2616+622+0 --focus pictures/kirby/IMGP1281.jpg
+--trim 1812x2612+473+4 --focus pictures/kirby/IMGP1289.jpg
+--trim 2020x2616+564+0 --focus pictures/kirby/IMGP1291.jpg
+--trim 1629x2608+560+8 --focus pictures/kirby/IMGP1299.jpg
+--trim 1899x2517+693+75 --focus pictures/kirby/IMGP1953.JPG
+--trim 1779x2588+817+4 --focus pictures/kirby/IMGP2058.JPG
+--trim 1779x2584+933+8 --focus pictures/kirby/IMGP2063.JPG
+--trim 1949x2592+759+0 --focus pictures/kirby/IMGP2114.JPG
+--trim 1991x2588+1377+4 --focus pictures/kirby/IMGP2147.JPG
+--trim 1543x1999+605+0 --focus pictures/kirby/IMGP2180.JPG
+--trim 1746x2592+386+0 --focus pictures/kirby/IMGP2314.JPG
+--trim 1787x2592+962+0 --focus pictures/kirby/IMGP2321.JPG
+--trim 1767x2592+863+0 --focus pictures/kirby/IMGP2326.JPG
+--trim 1920x2592+730+0 --focus pictures/kirby/IMGP2335.JPG
+--trim 1700x2588+1306+0 --focus pictures/kirby/IMGP2342.JPG
+--trim 1804x2555+1116+37 --focus pictures/kirby/IMGP3083.JPG
+--trim 1692x2592+1062+0 --focus pictures/kirby/IMGP3087.JPG
+--trim 1742x2592+100+0 --focus pictures/kirby/IMGP3114_1.JPG
+--trim 1779x2592+1140+0 --focus pictures/kirby/IMGP3123.JPG
+--trim 1781x2592+311+0 --focus pictures/kirby/IMGP3157.JPG
 pictures/kirby/IMGP3569.JPG
 pictures/kirby/IMGP3583.JPG
 pictures/kirby/IMGP3587.JPG
+--trim 2163x2673+677+0 --focus pictures/kristaps/common_cuttlefish.JPG
+--trim 1731x2672+923+0 --focus pictures/kristaps/cratena_peregrina.JPG
+--trim 1776x2672+619+0 --focus pictures/kristaps/flabellina_affinis_upsidedown.JPG
+--trim 1780x2668+1286+0 --focus pictures/kristaps/green_sea_turtle.JPG
+--trim 2257x2673+905+0 --focus pictures/kristaps/green_sea_turtle_closeup.JPG
+--trim 1845x2672+802+0 --focus pictures/kristaps/hawksbill_sea_turtle_moz.JPG
+--trim 2219x2672+774+0 --focus pictures/kristaps/humpback_whale_calf.jpg
+--trim 1928x2673+335+0 --focus pictures/kristaps/octopus_and_comber.JPG
 --trim 1628x2894+763+0 --focus pictures/tj/DSC_1099.jpg
 --trim 1733x3080+1054+0 --focus pictures/tj/DSC_1125.jpg
 --trim 1671x2971+2032+0 --focus pictures/tj/DSC_1361.jpg
