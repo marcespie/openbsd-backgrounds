@@ -64,6 +64,7 @@ sub findpic
 	return undef;
 }
 
+my ($minw, $minh, $minwname, $minhname);
 sub rescale
 {
 	my ($file, $old, $new) = @_;
@@ -84,6 +85,16 @@ sub rescale
 			$h = int($h * $factor);
 			$x = int($x * $factor);
 			$y = int($y * $factor);
+			if ($factor != 1) {
+				if (!defined $minw || $w < $minw) {
+					$minw = $w;
+					$minwname = $f;
+				}
+				if (!defined $minh || $h < $minh) {
+					$minh = $h;
+					$minhname = $f;
+				}
+			}
 			push @{$r->{$k}},
 			    "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
 		} else {
@@ -178,4 +189,11 @@ if (defined $orig) {
 	for my $r (glob('aspect-*')) {
 		rescale($r, $orig, $new);
 	}
+}
+
+if (defined $minwname) {
+	print "MIN WIDTH RESCALE: $minwname\n";
+}
+if (defined $minhname) {
+	print "MIN HEIGHT RESCALE: $minhname\n";
 }
