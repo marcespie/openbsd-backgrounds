@@ -187,12 +187,12 @@ if (defined $orig) {
 }
 
 my $i = 0;
-for my $p (sort {$rescaledw->{$b} <=> $rescaledw->{$a}} keys %$rescaledw) {
+for my $p (sort {$rescaledw->{$a} <=> $rescaledw->{$b}} keys %$rescaledw) {
 	print "$p (width $rescaledw->{$p})\n";
 	last if $i++ == 10;
 }
 $i = 0;
-for my $p (sort {$rescaledh->{$b} <=> $rescaledh->{$a}} keys %$rescaledh) {
+for my $p (sort {$rescaledh->{$a} <=> $rescaledh->{$b}} keys %$rescaledh) {
 	print "$p (height $rescaledh->{$p})\n";
 	last if $i++ == 10;
 }
