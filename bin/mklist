@@ -87,7 +87,7 @@ sub rescale
 			$x = int($x * $factor);
 			$y = int($y * $factor);
 			if ($factor != 1) {
-				if ($w > $h) {
+				if ($w < $h) {
 					$rescaledw->{$f} = $w;
 				} else {
 					$rescaledh->{$f} = $h;
