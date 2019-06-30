@@ -20,7 +20,7 @@ gm mogrify -resize '2400x3840>^' `cat portrait-large.list` &
 wait
 for o in landscape portrait
 do
-    cat $o.list|while read i; do 
+    cat $o.list $o-large.list|while read i; do 
 	j=`dirname $i|sed -e s/pictures/$o/`
 	mkdir -p $j
 	mv $i $j
