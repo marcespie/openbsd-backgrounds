@@ -149,12 +149,21 @@ find(sub {
 # let's get the old list
 my $orig = read_list();
 
+my $exceptions;
+if (open my $e, '<', 'larger') {
+	while (<$e>) {
+		chomp;
+		$exceptions->{$_} = 1;
+	}
+}
 # then pass it off to whatever tool can do the deed
 open(my $p, "-|", "gm", "identify", (sort @list)) or die;
 
 open(my $out, ">", "list") or die;
 open(my $V, ">", "portrait.list") or die;
 open(my $H, ">", "landscape.list") or die;
+open(my $W, ">", "portrait-large.list") or die;
+open(my $I, ">", "landscape-large.list") or die;
 while (<$p>) {
 	chomp;
 	if (m/^(.*?)(\[[0-9]+\])? JPEG ([0-9]+)x([0-9]+).*/) {
@@ -164,9 +173,17 @@ while (<$p>) {
 		if ($a >= $b * 1.2) {
 			$o = $H;
 		} elsif ($a*1.2 <= $b) {
-			$o = $V;
+			if (exists $exceptions->{$title}) {
+				$o = $W;
+			} else {
+				$o = $V;
+			}
 		} else {
-			$o = $H;
+			if (exists $exceptions->{$title}) {
+				$o = $I;
+			} else {
+				$o = $H;
+			}
 		}
 		print $o $title, "\n";
 		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
@@ -176,7 +193,9 @@ while (<$p>) {
 }
 close($out);
 close($V);
+close($W);
 close($H);
+close($I);
 close($p);
 
 if (defined $orig) {
