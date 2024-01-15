@@ -1,0 +1,101 @@
+--trim 2245x3991+1692+9 --focus pictures/deraadt/chobe-0512-165545tdr.jpg
+--trim 2124x3776+75+0 --focus pictures/deraadt/limestone-0727-094133tdr.jpg
+--trim 1417x2519+1708+0 --focus pictures/deraadt/limestone-0727-120951tdr.jpg
+--trim 2124x3776+211+0 --focus pictures/deraadt/limestone-0727-171837tdr.jpg
+--trim 1411x2510+917+8 --focus pictures/deraadt/limestone-0728-073918tdr.jpg
+--trim 1237x2199+695+321 --focus pictures/deraadt/limestone-0728-073918tdr.jpg
+--trim 1417x2519+666+0 --focus pictures/deraadt/vietnam-1108-184342tdr.jpg
+--trim 1872x2848+332+0 --focus pictures/djm/20111010_amsterdam_centraal.jpg
+--trim 1601x2847+1296+0 --focus pictures/djm/20120418_stalks.jpg
+--trim 2114x3761+3813+62 --focus pictures/djm/20120505_yosemite_panorama.jpg
+--trim 3458x4882+1600+30 --focus pictures/djm/20150405_blossom.jpg
+--trim 2762x4913+1063+0 --focus pictures/djm/20150405_dry_creek.jpg
+--trim 3111x4178+2323+0 --focus pictures/djm/20150405_trentham_trees.jpg
+--trim 1596x2837+505+10 --focus pictures/djm/20200221_lightfield_drops.jpg
+--trim 1652x2447+843+0 --focus pictures/espie/IMG_20170818_113034.jpg
+--trim 2042x3238+280+0 --focus pictures/espie/IMG_20170818_114024.jpg
+--trim 2260x3231+639+0 --focus pictures/espie/IMG_20180403_191952.jpg
+--trim 2067x2972+525+0 --focus pictures/espie/IMG_20180403_204420.jpg
+--trim 1973x2972+667+0 --focus pictures/espie/IMG_20180709_144923.jpg
+--trim 2098x2976+501+0 --focus pictures/espie/IMG_20180712_153159.jpg
+--trim 2036x2972+449+3 --focus pictures/espie/IMG_20190326_132752.jpg
+--trim 1918x2972+1140+0 --focus pictures/espie/IMG_20190401_200149.jpg
+--trim 1935x2962+809+10 --focus pictures/espie/IMG_20190405_103658.jpg
+--trim 2167x3261+263+3 --focus pictures/espie/angry_sea.jpg
+--trim 1839x2447+525+0 --focus pictures/espie/angry_sea2.jpg
+--trim 1973x2976+999+0 --focus pictures/espie/atlantic_night.jpg
+--trim 2466x3864+802+0 --focus pictures/espie/autumn-lake.jpg
+--trim 2716x3864+1588+0 --focus pictures/espie/autumn.jpg
+--trim 2343x3903+241+0 --focus pictures/espie/colorful_plants.jpg
+pictures/espie/hellish_sunset.jpg
+--trim 1931x3434+1839+21 --focus pictures/espie/magic-sunset.jpg
+pictures/espie/snowwave.jpg
+pictures/espie/sunset_vertical.jpg
+--trim 1661x2954+722+0 --focus pictures/espie/train+sky.jpg
+--trim 962x1711+557+0 --focus pictures/giovanni/DSCN0547_Vettore.jpg
+--trim 1306x2321+2144+2 --focus pictures/giovanni/IMG_064131_Portugal.jpg
+--trim 1701x3024+979+0 --focus pictures/gonzalo/3675.jpg
+--trim 1682x2989+1274+34 --focus pictures/gonzalo/3682.jpg
+pictures/gonzalo/photo4911190636942698552.jpg
+pictures/gonzalo/photo4911190636942698553.jpg
+pictures/gonzalo/photo4911190636942698557.jpg
+pictures/gonzalo/photo4911190636942698558.jpg
+pictures/gonzalo/photo4911190636942698563.jpg
+pictures/gonzalo/photo4911659986673838054.jpg
+pictures/gonzalo/photo4911659986673838056.jpg
+--trim 1699x3020+1395+3 --focus pictures/ian/ANeighboursBarn.jpg
+pictures/ian/dscn0099-costarica-tree.jpg
+--trim 1944x3456+212+0 --focus pictures/ian/dscn0183-costarica-iguana.jpg
+--trim 1673x2973+1470+0 --focus pictures/kirby/DSCN0100.JPG
+--trim 1687x3000+1117+0 --focus pictures/kirby/DSCN0105.JPG
+--trim 2509x2996+1051+3 --focus pictures/kirby/DSCN1064.JPG
+--trim 1684x2993+1379+7 --focus pictures/kirby/DSCN1094.JPG
+--trim 1668x2965+529+14 --focus pictures/kirby/DSCN1133.JPG
+--trim 1668x2965+1469+31 --focus pictures/kirby/DSCN1136.JPG
+--trim 1452x2582+785+10 --focus pictures/kirby/IMGP0583.JPG
+--trim 1763x2592+228+0 --focus pictures/kirby/IMGP0680.JPG
+--trim 1697x2592+833+0 --focus pictures/kirby/IMGP0713.JPG
+--trim 1835x2592+781+0 --focus pictures/kirby/IMGP0796.JPG
+--trim 1510x2000+546+0 --focus pictures/kirby/IMGP0986.JPG
+--trim 1932x2616+1140+0 --focus pictures/kirby/IMGP1160.jpg
+--trim 2212x2616+978+0 --focus pictures/kirby/IMGP1162.jpg
+--trim 2264x2613+933+3 --focus pictures/kirby/IMGP1172.jpg
+pictures/kirby/IMGP1184.jpg
+--trim 1857x2616+904+0 --focus pictures/kirby/IMGP1241.jpg
+--trim 2115x2616+717+0 --focus pictures/kirby/IMGP1271.jpg
+--trim 2045x2616+622+0 --focus pictures/kirby/IMGP1281.jpg
+--trim 1812x2612+473+4 --focus pictures/kirby/IMGP1289.jpg
+--trim 2020x2616+564+0 --focus pictures/kirby/IMGP1291.jpg
+--trim 1629x2608+560+8 --focus pictures/kirby/IMGP1299.jpg
+--trim 1899x2517+693+75 --focus pictures/kirby/IMGP1953.JPG
+--trim 1779x2588+817+4 --focus pictures/kirby/IMGP2058.JPG
+--trim 1779x2584+933+8 --focus pictures/kirby/IMGP2063.JPG
+--trim 1949x2592+759+0 --focus pictures/kirby/IMGP2114.JPG
+--trim 1991x2588+1377+4 --focus pictures/kirby/IMGP2147.JPG
+--trim 1543x1999+605+0 --focus pictures/kirby/IMGP2180.JPG
+--trim 1746x2592+386+0 --focus pictures/kirby/IMGP2314.JPG
+--trim 1787x2592+962+0 --focus pictures/kirby/IMGP2321.JPG
+--trim 1767x2592+863+0 --focus pictures/kirby/IMGP2326.JPG
+--trim 1920x2592+730+0 --focus pictures/kirby/IMGP2335.JPG
+--trim 1700x2588+1306+0 --focus pictures/kirby/IMGP2342.JPG
+--trim 1804x2555+1116+37 --focus pictures/kirby/IMGP3083.JPG
+--trim 1692x2592+1062+0 --focus pictures/kirby/IMGP3087.JPG
+--trim 1742x2592+100+0 --focus pictures/kirby/IMGP3114_1.JPG
+--trim 1779x2592+1140+0 --focus pictures/kirby/IMGP3123.JPG
+--trim 1781x2592+311+0 --focus pictures/kirby/IMGP3157.JPG
+pictures/kirby/IMGP3569.JPG
+pictures/kirby/IMGP3583.JPG
+pictures/kirby/IMGP3587.JPG
+--trim 2163x2673+677+0 --focus pictures/kristaps/common_cuttlefish.JPG
+--trim 1731x2672+923+0 --focus pictures/kristaps/cratena_peregrina.JPG
+--trim 1776x2672+619+0 --focus pictures/kristaps/flabellina_affinis_upsidedown.JPG
+--trim 1780x2668+1286+0 --focus pictures/kristaps/green_sea_turtle.JPG
+--trim 2257x2673+905+0 --focus pictures/kristaps/green_sea_turtle_closeup.JPG
+--trim 1845x2672+802+0 --focus pictures/kristaps/hawksbill_sea_turtle_moz.JPG
+--trim 2219x2672+774+0 --focus pictures/kristaps/humpback_whale_calf.jpg
+--trim 1928x2673+335+0 --focus pictures/kristaps/octopus_and_comber.JPG
+--trim 1628x2894+763+0 --focus pictures/tj/DSC_1099.jpg
+--trim 1733x3080+1054+0 --focus pictures/tj/DSC_1125.jpg
+--trim 1671x2971+2032+0 --focus pictures/tj/DSC_1361.jpg
+--trim 1702x3025+1261+0 --focus pictures/tj/DSC_1419.jpg
+--trim 1430x2542+1708+0 --focus pictures/tj/DSC_2124.jpg

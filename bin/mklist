@@ -1,0 +1,226 @@
+#! /usr/bin/perl
+
+# Copyright (c) 2019 Marc Espie <espie@openbsd.org>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+# 
+#
+# look at the pics and show their size and aspect ratio
+
+use strict;
+use warnings;
+use File::Find;
+
+sub farey
+{
+	my ($x, $N) = @_;
+    	my ($a, $b) = (0, 1);
+    	my ($c, $d) = (1, 0);
+	while ($b <= $N && $d <= $N) {
+		my $mediant = ($a+$c)/($b+$d);
+		if ($x == $mediant) {
+			if ($b + $d <= $N) {
+				return ($a+$c, $b+$d);
+			} elsif ($d > $b) {
+				return ($c, $d);
+			} else {
+				return ($a, $b);
+			}
+		} elsif ($x > $mediant) {
+			($a, $b) = ($a+$c, $b+$d);
+		} else {
+			($c, $d) = ($a+$c, $b+$d);
+		}
+	}
+	if ($b > $N) {
+		return ($c, $d);
+	} else {
+		return ($a, $b);
+	}
+}
+
+my @dirs;
+my @locations = (qw(pictures portrait landscape));
+
+
+sub findpic
+{
+	my $fullname = shift;
+	for my $d (@locations) {
+		if ($fullname =~ m,^\Q$d\E/(.*),) {
+			return $1;
+		}
+	}
+	return undef;
+}
+
+my ($rescaledw, $rescaledh);
+
+sub rescale
+{
+	my ($file, $old, $new) = @_;
+	open(my $in, '<', $file) or die;
+	my $r = {};
+	while(<$in>) {
+		chomp;
+		next if m/^\s*$/; # skip empty lines
+		if (my ($w, $h, $x, $y, $f) = 
+		    m/^\-\-trim (\d+)x(\d+)\+(\d+)\+(\d+)\s+\-\-focus\s+(.*)/) {
+			my $k = findpic($f);
+			if (!exists $new->{$k}) {
+				print "CAN'T FIND picture $f\n";
+				exit(1);
+			}
+			my $factor = $new->{$k}{width}/$old->{$k}{width};
+			$w = int($w * $factor);
+			$h = int($h * $factor);
+			$x = int($x * $factor);
+			$y = int($y * $factor);
+			if ($factor != 1) {
+				if ($w < $h) {
+					$rescaledw->{$f} = $w;
+				} else {
+					$rescaledh->{$f} = $h;
+				}
+			}
+			push @{$r->{$k}},
+			    "--trim ${w}x$h+$x+$y --focus $new->{$k}{name}";
+		} else {
+			my $k = findpic($_);
+			if (exists $new->{$k}) {
+				$_ = $new->{$k}{name};
+			}
+			push @{$r->{$k}}, $_;
+		}
+	}
+	close($in);
+	open(my $out, '>', $file) or die;
+	for my $k (sort keys %$r) {
+		for my $l (@{$r->{$k}}) {
+			print $out $l, "\n";
+		}
+	}
+	close($out);
+}
+
+sub read_list
+{
+	open my $in, '<', "list" or return;
+
+	my $data = {};
+	while(<$in>) {
+		if (my ($fullname, $width, $height) = m/^(.*)\s(\d+)x(\d+)\s/) {
+			$data->{$fullname} = {name => $fullname, 
+			    width => $width,
+			    height => $height};
+			my $k = findpic($fullname);
+			if (defined $k) {
+				$data->{$k} = $data->{$fullname};
+			}
+		} else {
+			die "Incorrect line in list $_\n";
+		}
+	}
+	return $data;
+}
+
+for my $i (@locations) {
+	push(@dirs, $i) if -d $i;
+}
+
+if (@dirs == 0) {
+	print STDERR "No valid directory\n";
+	exit(1);
+}
+# first build the list of pics
+my @list;
+find(sub {
+	return unless -f $_;
+	push(@list, $File::Find::name);
+    }, @dirs);
+
+# let's get the old list
+my $orig = read_list();
+
+my $exceptions;
+if (open my $e, '<', 'larger') {
+	while (<$e>) {
+		chomp;
+		$exceptions->{$_} = 1;
+	}
+} else {
+	die;
+}
+# then pass it off to whatever tool can do the deed
+open(my $p, "-|", "gm", "identify", (sort @list)) or die;
+
+open(my $out, ">", "list") or die;
+open(my $V, ">", "portrait.list") or die;
+open(my $H, ">", "landscape.list") or die;
+open(my $W, ">", "portrait-large.list") or die;
+open(my $I, ">", "landscape-large.list") or die;
+while (<$p>) {
+	chomp;
+	if (m/^(.*?)(\[[0-9]+\])? JPEG ([0-9]+)x([0-9]+).*/) {
+		my ($title, $h, $w) = ($1, $3, $4);
+		my ($a, $b) = farey($h/ $w, 16);
+		my $o;
+		if ($a >= $b * 1.2) {
+			if (exists $exceptions->{$title}) {
+				$o = $I;
+			} else {
+				$o = $H;
+			}
+		} elsif ($a*1.2 <= $b) {
+			if (exists $exceptions->{$title}) {
+				$o = $W;
+			} else {
+				$o = $V;
+			}
+		} else {
+			if (exists $exceptions->{$title}) {
+				$o = $I;
+			} else {
+				$o = $H;
+			}
+		}
+		print $o $title, "\n";
+		print $out $title, " ", $h, "x", $w, " ", $a, ":", $b, "\n";
+	} else {
+		print STDERR "Bad line #$. from pipe: $_\n";
+	}
+}
+close($out);
+close($V);
+close($W);
+close($H);
+close($I);
+close($p);
+
+if (defined $orig) {
+	my $new = read_list();
+	for my $r (glob('aspect-*')) {
+		rescale($r, $orig, $new);
+	}
+}
+
+my $i = 0;
+for my $p (sort {$rescaledw->{$a} <=> $rescaledw->{$b}} keys %$rescaledw) {
+	print "$p (width $rescaledw->{$p})\n";
+	last if $i++ == 10;
+}
+$i = 0;
+for my $p (sort {$rescaledh->{$a} <=> $rescaledh->{$b}} keys %$rescaledh) {
+	print "$p (height $rescaledh->{$p})\n";
+	last if $i++ == 10;
+}

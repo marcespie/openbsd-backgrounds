@@ -2,8 +2,25 @@
 # example wallpaper script
 # this uses xwallpaper and random_run from ports
 
-# choose a random portrait pic
-pic1=`rr -1pl portrait`
-# and a random landscape pic
-pic2=`rr -1pl landscape`
-xwallpaper --output HDMI-0 --zoom $pic1 --output VGA-0 --zoom $pic2
+set -e
+: ${PREFIX:=/usr/local}
+: ${BG:=share/openbsd-backgrounds}
+cd ${PREFIX}/${BG}
+
+xrandr|grep -w connected|sed -e 's/primary//'|  {
+while read display connected res right rest;
+do
+    case "$right" in
+    left|right)
+	pic=`rr -1rp portrait/*`
+	;;
+    *)
+	pic=`rr -1rp landscape/*`
+	;;
+    esac
+    pics="$pics $pic"
+    args="$args --output $display --maximize $pic"
+done
+echo "Showing $pics"
+eval xwallpaper $args
+}

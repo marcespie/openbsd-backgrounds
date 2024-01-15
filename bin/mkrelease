@@ -1,0 +1,32 @@
+#! /bin/sh
+
+# this is the small script I use to build releases
+set -e
+V=HEAD
+if [ $# -gt 0 ]
+then
+	V=$1
+fi
+D=openbsd-backgrounds-$V
+rm -rf $D
+git archive --prefix=$D/ --format=tar $V|tar xvf -
+cd $D
+rm list
+perl bin/mklist
+cat landscape.list |xargs -n20 -P8 gm mogrify -resize '2560x1600>^' &
+gm mogrify -resize '3840x2400>^' `cat landscape-large.list` &
+gm mogrify -resize '1600x2560>^' `cat portrait.list` &
+gm mogrify -resize '2400x3840>^' `cat portrait-large.list` &
+wait
+for o in landscape portrait
+do
+    cat $o.list $o-large.list|while read i; do 
+	j=`dirname $i|sed -e s/pictures/$o/`
+	mkdir -p $j
+	mv $i $j
+    done
+done
+perl bin/mklist
+rm -rf pictures #landscape*.list portrait*.list
+cd ..
+tar zcf $D.tar.gz $D

@@ -1,0 +1,132 @@
+#! /usr/bin/perl
+# 
+# Copyright (c) 2019 Marc Espie <espie@openbsd.org>
+# 
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+# 
+use strict;
+use warnings;
+
+use List::Util;
+use File::Find;
+use OpenBSD::Subst;
+
+sub farey
+{
+	my ($x, $N) = @_;
+    	my ($a, $b) = (0, 1);
+    	my ($c, $d) = (1, 0);
+	while ($b <= $N && $d <= $N) {
+		my $mediant = ($a+$c)/($b+$d);
+		if ($x == $mediant) {
+			if ($b + $d <= $N) {
+				return ($a+$c, $b+$d);
+			} elsif ($d > $b) {
+				return ($c, $d);
+			} else {
+				return ($a, $b);
+			}
+		} elsif ($x > $mediant) {
+			($a, $b) = ($a+$c, $b+$d);
+		} else {
+			($c, $d) = ($a+$c, $b+$d);
+		}
+	}
+	if ($b > $N) {
+		return ($c, $d);
+	} else {
+		return ($a, $b);
+	}
+}
+
+sub add_dir
+{
+	my ($l, $dir) = @_;
+	if (!-d $dir) {
+		$dir = 'pictures';
+	}
+	find(
+	    sub { 
+		push @$l, $File::Find::name if -f $_; 
+	    }, $dir);
+}
+
+my $s = OpenBSD::Subst->new;
+$s->add('TRUEPREFIX' => '/usr/local');
+$s->add('LOCALBASE' => '/usr/local');
+
+my $prefix = $s->do('${TRUEPREFIX}');
+my $localbase = $s->do('${LOCALBASE}');
+
+if (!-x "$localbase/bin/xwallpaper") {
+	print STDERR "You must pkg_add xwallpaper\n";
+	exit 1;
+}
+my $imagedir = "$prefix/share/openbsd-backgrounds";
+if (@ARGV != 0) {
+	$imagedir = shift;
+}
+$ENV{PATH} = "${localbase}/bin:/usr/bin:/usr/X11R6/bin";
+
+open(my $pipe, "-|", "xrandr") or die "Can't run xrandr: $!";
+my $monitors = {};
+
+while (<$pipe>) {
+	chomp;
+	next unless m/\bconnected\b/;
+	my ($name, undef, @r) = split(/\s+/, $_);
+	my $monitor = $monitors->{$name} = {name => $name};
+	if ($r[0] eq 'primary') {
+		$monitor->{primary} = 1;
+		shift @r;
+	}
+	my $res = shift @r;
+	if ($res =~ m/(\d+)x(\d+)\+\d+\+\d+/) {
+		($monitor->{a}, $monitor->{b}) = farey($1/$2, 25);
+	}
+	$monitor->{portrait} = ($r[0] eq 'left' or $r[0] eq 'right');
+}
+close($pipe);
+
+chdir($imagedir) or die $!;
+
+my @command = (qw(xwallpaper));
+# build the command on each monitor
+for my $m (values %$monitors) {
+	my @l;
+	my $ratio = "$m->{a}:$m->{b}";
+	my $i = "aspect-$ratio";
+	# let's cheat a bit
+	if (!-r $i && $ratio eq '5:8') {
+		$i = 'aspect-9:16';
+	}
+	if (-r $i) {
+		open my $file, "<", $i;
+		while (<$file>) {
+			chomp;
+			if (m/^\+(.*)/) {
+				add_dir(\@l, $1);
+			}
+			push(@l, $_);
+		}
+	} else {
+		my $dir = $m->{a} < $m->{b} ? "portrait" : "landscape";
+		add_dir(\@l, $dir);
+	}
+	@l = (List::Util::shuffle @l);
+	my @r = split(/\s+/, $l[0]);
+	unshift(@r, '--maximize') if @r == 1;
+	push(@command, '--output', $m->{name}, @r);
+}
+print "Running ", join(' ', @command), "\n";
+exec {$command[0]} @command;
